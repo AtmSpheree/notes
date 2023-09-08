@@ -28,9 +28,10 @@ def note_view(request: Request, id: int = None):
         if not note:
             return Response(status=400)
         serializer = NoteSerializer(note)
-        if serializer.is_valid():
+        try:
             return Response({"data": serializer.data})
-        return Response(status=500)
+        except Exception:
+            return Response(status=500)
     elif request.method == 'POST':
         if id is not None:
             return Response(status=400)
@@ -50,31 +51,33 @@ def notes_view(request: Request, user_id: int = None):
             notes = Note.objects.filter(user=User.objects.filter(id=user_id).first()).all()
             if not notes:
                 return Response(status=400)
-            serializer = NoteSerializer(data=notes, many=True)
-            if serializer.is_valid():
+            serializer = NoteSerializer(notes, many=True)
+            try:
                 return Response({"data": serializer.data})
-            return Response(status=500)
+            except Exception:
+                return Response(status=500)
         else:
             if request.user.is_superuser:
                 notes = Note.objects.all()
-                serializer = NoteSerializer(data=notes, many=True)
-                if serializer.is_valid():
+                serializer = NoteSerializer(notes, many=True)
+                try:
                     return Response({"data": serializer.data})
-                return Response(status=500)
+                except Exception:
+                    return Response(status=500)
             return Response(status=403)
     elif request.method == 'POST':
         if user_id is not None:
             return Response(status=400)
         if request.user.is_superuser:
             serializer = NoteSerializer(data=request.data, many=True)
-            if not serializer.data:
+            if not serializer.is_valid():
                 return Response(400)
             for note in serializer.data:
                 try:
-                    note_obj = Note(title=note.title, description=note.description)
+                    note_obj = Note(title=note['title'], description=note['description'])
                     note_obj.user = request.user
                     note_obj.save()
                 except Exception:
                     return Response(400)
-            return Response(200)
+            return Response(201)
         return Response(status=403)
