@@ -11,21 +11,26 @@ from .models import Note
 from django.contrib.auth.models import User
 
 
-# Create your views here.
-class UserView(APIView):
-    @authentication_classes([JWTAuthentication])
-    @permission_classes([IsAuthenticated])
-    def get(self, request: Request):
-        return Response({
-            'data': UserSerializer(request.user).data
-        })
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def user_view(request: Request):
+    return Response({
+        'data': UserSerializer(request.user).data
+    })
 
 
-@api_view(['GET', 'POST'])
-def note_view(request: Request, id: int = None):
+@api_view(['GET', 'POST', 'PUT'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def note_view(request: Request, note_id: int = None):
     if request.method == 'GET':
-        note = Note.objects.filter(user=request.user, id=id).first()
-        if not note:
+        try:
+            if request.user.is_superuser:
+                note = Note.objects.get(id=note_id)
+            else:
+                note = Note.objects.get(user=request.user, id=note_id)
+        except Exception:
             return Response(status=400)
         serializer = NoteSerializer(note)
         try:
@@ -33,18 +38,35 @@ def note_view(request: Request, id: int = None):
         except Exception:
             return Response(status=500)
     elif request.method == 'POST':
-        if id is not None:
-            return Response(status=400)
+        if note_id is not None:
+            try:
+                if request.user.is_superuser:
+                    note = Note.objects.get(id=note_id)
+                else:
+                    note = Note.objects.get(user=request.user, id=note_id)
+            except:
+                return Response(status=400)
+            try:
+                serializer = NoteSerializer(data=request.data, instance=note)
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+                return Response(status=201)
+            except Exception:
+                return Response(status=400)
         serializer = NoteSerializer(data=request.data)
-        if serializer.is_valid():
+        try:
+            serializer.is_valid(raise_exception=True)
             note = Note(**serializer.data)
             note.user = request.user
             note.save()
             return Response(status=201)
-        return Response(status=400)
+        except Exception:
+            return Response(status=400)
 
 
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
 def notes_view(request: Request, user_id: int = None):
     if request.method == 'GET':
         if user_id is not None:

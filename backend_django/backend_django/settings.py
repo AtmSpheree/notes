@@ -26,6 +26,12 @@ SECRET_KEY = 'django-insecure-i1u3aka!(+b-aeas9^lqhmgtcy0l4z+v#ufi#7pjiyoy(92bo6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    )
+}
+
 ALLOWED_HOSTS = []
 
 
@@ -40,14 +46,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'backend_api.apps.BackendApiConfig',
     'rest_framework',
-    'rest_framework_simplejwt.token_blacklist'
+    'rest_framework_simplejwt.token_blacklist',
+    'corsheaders'
 ]
 
 # JWT Auth
 ROTATE_REFRESH_TOKENS = True
-BLACKLIST_AFTER_ROTATION = True
-ACCESS_TOKEN_LIFETIME = timedelta(days=1)
-REFRESH_TOKEN_LIFETIME = timedelta(days=14)
+ACCESS_TOKEN_LIFETIME = timedelta(minutes=30)
+REFRESH_TOKEN_LIFETIME = timedelta(days=1)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -57,6 +63,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000"
 ]
 
 ROOT_URLCONF = 'backend_django.urls'

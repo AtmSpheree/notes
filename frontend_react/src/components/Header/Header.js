@@ -1,5 +1,7 @@
 import '../../css/Header.css';
-import logo from '../../logo.png'
+import '../../css/Header_adaptive.css';
+import logo from '../../img/logo.png'
+import github_mark from '../../img/github-mark-white.png'
 
 const Header = () => {
   return (
@@ -9,6 +11,9 @@ const Header = () => {
           <img src={logo} alt="logotype"/>
           <a href="/">notes_app</a>
         </div>
+        <a className="github_button" rel="noopener noreferrer" target="_blank" href="https://github.com/AtmSpheree/notes">
+          <img src={github_mark} alt={"GitHub"}/>
+        </a>
       </div>
     </div>
   );
