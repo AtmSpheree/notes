@@ -38,7 +38,7 @@ const Login = (props) => {
         } else if (response.status === 401) {
           throw Error("Unauthorized");
         } else {
-            throw Error(`Something went wrong: code ${response.status}`);
+          throw Error(`Something went wrong: code ${response.status}`);
         }
       }
     ).then(({access, refresh}) => {

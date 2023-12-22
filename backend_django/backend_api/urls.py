@@ -10,5 +10,6 @@ urlpatterns = [
     path('notes/<int:user_id>', views.notes_view, name='notes'),
     path('user', views.user_view, name='user'),
     path('token/obtain', TokenObtainPairView.as_view(), name='token_obtain'),
-    path('token/refresh', TokenRefreshView.as_view(), name='token_refresh')
+    path('token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
+    path('token/logout', views.logout, name='token_logout')
 ]

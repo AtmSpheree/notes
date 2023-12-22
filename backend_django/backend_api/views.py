@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import authentication_classes, permission_classes, api_view
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import UserSerializer, NoteSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
@@ -18,6 +19,17 @@ def user_view(request: Request):
     return Response({
         'data': UserSerializer(request.user).data
     })
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([JWTAuthentication])
+def logout(request: Request):
+    try:
+        RefreshToken.for_user(request.user)
+        return Response(status=200)
+    except Exception:
+        return Response(status=500)
 
 
 @api_view(['GET', 'POST', 'PUT'])
