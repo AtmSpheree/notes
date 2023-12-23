@@ -15,8 +15,9 @@ const App = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
+    console.log(JSON.stringify({ refresh }))
     if (refresh === null) {
-      navigate('/login')
+      navigate('/login');
     } else if (refreshRequired) {
       fetch(
         `${config.host}/api/token/refresh`,
@@ -30,8 +31,10 @@ const App = () => {
       ).then(response => {
         if (response.ok) {
           return response.json()
-        } else {
+        } else if (response.status === 401) {
           navigate('/login');
+          throw Error(`Something went wrong: code ${response.status}`)
+        } else {
           throw Error(`Something went wrong: code ${response.status}`)
         }
       }).then(({access, refresh}) => {
@@ -64,7 +67,8 @@ const App = () => {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Home access={access} setRefreshRequired={setRefreshRequired}/>}/>
+        <Route path="/" element={<Home access={access} refresh={refresh} setRefreshRequired={setRefreshRequired}
+                                       navigate={navigate} setAccess={setAccess} setRefresh={setRefresh}/>}/>
         <Route path="/about" element={<About/>}/>
         <Route path="/login" element={<Login setRefresh={setRefresh} setAccess={setAccess}
                                              access={access} navigate={navigate}/>}/>

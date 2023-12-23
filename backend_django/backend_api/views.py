@@ -26,7 +26,7 @@ def user_view(request: Request):
 @authentication_classes([JWTAuthentication])
 def logout(request: Request):
     try:
-        RefreshToken.for_user(request.user)
+
         return Response(status=200)
     except Exception:
         return Response(status=500)

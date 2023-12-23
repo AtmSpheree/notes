@@ -29,6 +29,9 @@ DEBUG = True
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
 
@@ -46,14 +49,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'backend_api.apps.BackendApiConfig',
     'rest_framework',
+    'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders'
 ]
 
 # JWT Auth
-ROTATE_REFRESH_TOKENS = True
-ACCESS_TOKEN_LIFETIME = timedelta(minutes=30)
-REFRESH_TOKEN_LIFETIME = timedelta(days=1)
+SIMPLE_JWT = {
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1)
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

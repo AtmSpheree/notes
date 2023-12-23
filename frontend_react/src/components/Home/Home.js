@@ -1,6 +1,7 @@
 import config from '../../config.json'
 import '../../css/Home.css';
 import Header from '../Header/Header';
+import LogoutButton from '../Login/LogoutButton'
 import {useEffect, useState} from "react";
 
 const Home = (props) => {
@@ -53,11 +54,11 @@ const Home = (props) => {
         <p>{lastName}</p>
         <p>{username}</p>
         <p>{email}</p>
+        <LogoutButton setAccess={props.setAccess} setRefresh={props.setRefresh} navigate={props.navigate}
+                      access={props.access} refresh={props.refresh}/>
       </div>
     </div>
   );
 }
-
-Home.defaultProps = {access: ""}
 
 export default Home;
