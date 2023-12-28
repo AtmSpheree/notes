@@ -1,4 +1,3 @@
-import config from '../../config.json'
 import '../../css/Login.css';
 import {useState} from "react";
 import {isValidToken} from '../../utils';
@@ -21,7 +20,7 @@ const Login = (props) => {
     setLoading(true);
     setIsAccess(true);
     fetch(
-      `${config.host}/api/token/obtain`,
+      `${process.env.REACT_APP_HOST}/api/token/obtain`,
       {
         method: 'POST',
         headers: {

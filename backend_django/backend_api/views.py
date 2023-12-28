@@ -21,17 +21,6 @@ def user_view(request: Request):
     })
 
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-@authentication_classes([JWTAuthentication])
-def logout(request: Request):
-    try:
-
-        return Response(status=200)
-    except Exception:
-        return Response(status=500)
-
-
 @api_view(['GET', 'POST', 'PUT'])
 @permission_classes([IsAuthenticated])
 @authentication_classes([JWTAuthentication])

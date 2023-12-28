@@ -1,4 +1,3 @@
-import config from '../../config.json'
 import '../../css/App.css';
 import {Route, Routes} from "react-router";
 import About from '../About/About'
@@ -15,12 +14,12 @@ const App = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    console.log(JSON.stringify({ refresh }))
+    console.log(process.env.REACT_APP_HOST)
     if (refresh === null) {
       navigate('/login');
     } else if (refreshRequired) {
       fetch(
-        `${config.host}/api/token/refresh`,
+        `${process.env.HOST}/api/token/refresh`,
         {
           method: 'POST',
           headers: {

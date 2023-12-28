@@ -1,5 +1,3 @@
-import config from "./config.json";
-
 export function getCookie(name) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -9,7 +7,7 @@ export function getCookie(name) {
 export function isValidToken(access_token) {
   let result = false;
   fetch(
-    `${config.host}/api/user`,
+    `${process.env.REACT_APP_HOST}/api/user`,
     {
       headers: {
         'Content-Type': 'application/json;charset=utf-8',

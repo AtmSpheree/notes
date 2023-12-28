@@ -164,3 +164,6 @@ backend_django/db.*
 
 # Django Migrations
 backend_django/backend_api/migrations
+
+# Env Files
+.env

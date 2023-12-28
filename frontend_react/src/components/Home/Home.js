@@ -1,4 +1,3 @@
-import config from '../../config.json'
 import '../../css/Home.css';
 import Header from '../Header/Header';
 import LogoutButton from '../Login/LogoutButton'
@@ -13,7 +12,7 @@ const Home = (props) => {
   useEffect(() => {
     if (props.access) {
       fetch(
-        `${config.host}/api/user`,
+        `${process.env.REACT_APP_HOST}/api/user`,
         {
           headers: {
             'Content-Type': 'application/json;charset=utf-8',

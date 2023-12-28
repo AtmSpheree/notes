@@ -1,12 +1,12 @@
 import '../../css/LogoutButton.css';
-import config from '../../config.json';
 import {useState} from "react";
+
 
 const LogoutButton = (props) => {
   const clickHandler = e => {
     e.preventDefault();
     fetch(
-      `${config.host}/api/token/blacklist`,
+      `${process.env.REACT_APP_HOST}/api/token/blacklist`,
       {
         method: "POST",
         headers: {
